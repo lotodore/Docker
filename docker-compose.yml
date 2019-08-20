@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:9.5
     volumes:
-      - /var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -16,6 +16,9 @@ services:
         - cachet_ver=2.4
     ports:
       - 80:8000
+      - 443:8001
+    volumes:
+      - /etc/nginx/ssl:/etc/nginx/ssl:ro
     links:
       - postgres:postgres
     environment:
@@ -28,7 +31,9 @@ services:
       - DB_PREFIX=chq_
       - APP_KEY=${APP_KEY:-null}
       - APP_LOG=errorlog
-      - DEBUG=false
+      - APP_DEBUG=false
+      - APP_ENV=production
+      - SESSION_DRIVER=apc
     depends_on:
       - postgres
     restart: on-failure

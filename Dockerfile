@@ -1,6 +1,7 @@
 FROM nginx:1.15.12-alpine
 
 EXPOSE 8000
+EXPOSE 8001
 CMD ["/sbin/entrypoint.sh"]
 
 ARG cachet_ver
@@ -56,7 +57,8 @@ RUN apk add --no-cache --update \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
-    ln -sf /dev/stderr /var/log/php7/error.log
+    ln -sf /dev/stderr /var/log/php7/error.log && \
+    mkdir -p /etc/nginx/ssl
 
 RUN adduser -S -s /bin/bash -u 1001 -G root www-data
 
